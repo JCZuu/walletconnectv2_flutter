@@ -1,0 +1,41 @@
+PODS:
+  - CryptoSwift (1.4.2)
+  - Flutter (1.0.0)
+  - WalletConnectSwiftV2 (0.0.1):
+    - CryptoSwift (>= 1.4.1)
+  - walletconnectv2_dart (0.0.1):
+    - Flutter
+    - WalletConnectSwiftV2
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - WalletConnectSwiftV2 (from `https://github.com/BitizenWallet/WalletConnectSwiftV2.git`, branch `main`)
+  - walletconnectv2_dart (from `.symlinks/plugins/walletconnectv2_dart/ios`)
+
+SPEC REPOS:
+  trunk:
+    - CryptoSwift
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  WalletConnectSwiftV2:
+    :branch: main
+    :git: https://github.com/BitizenWallet/WalletConnectSwiftV2.git
+  walletconnectv2_dart:
+    :path: ".symlinks/plugins/walletconnectv2_dart/ios"
+
+CHECKOUT OPTIONS:
+  WalletConnectSwiftV2:
+    :commit: 9d2280671747d970c2e02bb5342fe0396c55c223
+    :git: https://github.com/BitizenWallet/WalletConnectSwiftV2.git
+
+SPEC CHECKSUMS:
+  CryptoSwift: a532e74ed010f8c95f611d00b8bbae42e9fe7c17
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  WalletConnectSwiftV2: d7dec60de224c9aa293181161d1b077d90debd38
+  walletconnectv2_dart: 34e5d4d1473470e339910af5f7034dd78072deda
+
+PODFILE CHECKSUM: ea7d6fd84c180415419883e591e78441bc6655fc
+
+COCOAPODS: 1.11.2
