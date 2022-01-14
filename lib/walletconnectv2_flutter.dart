@@ -78,13 +78,14 @@ class Result<T> {
 }
 
 class Walletconnectv2Flutter {
-  static const MethodChannel _channel = MethodChannel('walletconnectv2_flutter');
+  static const MethodChannel _channel =
+      MethodChannel('walletconnectv2_flutter');
 
-  static late Future<void> Function(
-          int proposalId, AppMetadata metadata, SessionPermissions permissions)
+  static Future<void> Function(
+          int proposalId, AppMetadata metadata, SessionPermissions permissions)?
       onProposal;
-  static late Future<void> Function(
-      AppMetadata metadata, SessionRequest request) onRequest;
+  static Future<void> Function(AppMetadata metadata, SessionRequest request)?
+      onRequest;
 
   static Future<Result<String?>> get platformVersion async {
     final String? version = await _channel.invokeMethod('getPlatformVersion');
@@ -153,14 +154,18 @@ class Walletconnectv2Flutter {
             "blockchains": call.arguments["permissions"]["blockchains"],
             "methods": call.arguments["permissions"]["methods"],
           });
-          onProposal(proposalId, proposer, permissions);
+          if (onProposal != null) {
+            onProposal!(proposalId, proposer, permissions);
+          }
           return;
         case "onRequest":
           final AppMetadata proposer = AppMetadata.fromJson(
               jsonDecode(call.arguments["proposer"] as String));
           final SessionRequest request = SessionRequest.fromJson(
               jsonDecode(call.arguments["request"] as String));
-          onRequest(proposer, request);
+          if (onRequest != null) {
+            onRequest!(proposer, request);
+          }
           return;
       }
     } catch (e) {
