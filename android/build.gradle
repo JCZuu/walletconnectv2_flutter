@@ -1,4 +1,4 @@
-group 'org.bitizen.walletconnectv2_dart'
+group 'org.bitizen.walletconnectv2_flutter'
 version '1.0-SNAPSHOT'
 
 buildscript {

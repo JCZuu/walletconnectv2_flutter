@@ -1,6 +1,6 @@
-# walletconnectv2_dart_example
+# walletconnectv2_flutter_example
 
-Demonstrates how to use the walletconnectv2_dart plugin.
+Demonstrates how to use the walletconnectv2_flutter plugin.
 
 ## Getting Started
 

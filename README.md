@@ -1,4 +1,4 @@
-# walletconnectv2_dart
+# walletconnectv2_flutter
 
 A new flutter plugin project.
 

@@ -1,9 +1,9 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:walletconnectv2_dart/walletconnectv2_dart.dart';
+import 'package:walletconnectv2_flutter/walletconnectv2_flutter.dart';
 
 void main() {
-  const MethodChannel channel = MethodChannel('walletconnectv2_dart');
+  const MethodChannel channel = MethodChannel('walletconnectv2_flutter');
 
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -18,6 +18,6 @@ void main() {
   });
 
   test('getPlatformVersion', () async {
-    expect(await Walletconnectv2Dart.platformVersion, '42');
+    expect(await Walletconnectv2Flutter.platformVersion, '42');
   });
 }

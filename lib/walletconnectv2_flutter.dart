@@ -5,7 +5,7 @@ import 'dart:developer';
 import 'package:flutter/services.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'walletconnectv2_dart.g.dart';
+part 'walletconnectv2_flutter.g.dart';
 
 @JsonSerializable()
 class AppMetadata {
@@ -77,8 +77,8 @@ class Result<T> {
   }
 }
 
-class Walletconnectv2Dart {
-  static const MethodChannel _channel = MethodChannel('walletconnectv2_dart');
+class Walletconnectv2Flutter {
+  static const MethodChannel _channel = MethodChannel('walletconnectv2_flutter');
 
   static late Future<void> Function(
           int proposalId, AppMetadata metadata, SessionPermissions permissions)

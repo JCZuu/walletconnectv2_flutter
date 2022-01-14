@@ -1,4 +1,4 @@
-name: walletconnectv2_dart
+name: walletconnectv2_flutter
 description: A new flutter plugin project.
 version: 0.0.1
 homepage:
@@ -31,10 +31,10 @@ flutter:
   plugin:
     platforms:
       android:
-        package: org.bitizen.walletconnectv2_dart
-        pluginClass: Walletconnectv2DartPlugin
+        package: org.bitizen.walletconnectv2_flutter
+        pluginClass: Walletconnectv2FlutterPlugin
       ios:
-        pluginClass: Walletconnectv2DartPlugin
+        pluginClass: Walletconnectv2FlutterPlugin
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:

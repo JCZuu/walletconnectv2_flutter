@@ -1,4 +1,4 @@
-package org.bitizen.walletconnectv2_dart
+package org.bitizen.walletconnectv2_flutter
 
 import androidx.annotation.NonNull
 
@@ -8,8 +8,8 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 
-/** Walletconnectv2DartPlugin */
-class Walletconnectv2DartPlugin: FlutterPlugin, MethodCallHandler {
+/** Walletconnectv2FlutterPlugin */
+class Walletconnectv2FlutterPlugin: FlutterPlugin, MethodCallHandler {
   /// The MethodChannel that will the communication between Flutter and native Android
   ///
   /// This local reference serves to register the plugin with the Flutter Engine and unregister it
@@ -17,7 +17,7 @@ class Walletconnectv2DartPlugin: FlutterPlugin, MethodCallHandler {
   private lateinit var channel : MethodChannel
 
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "walletconnectv2_dart")
+    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "walletconnectv2_flutter")
     channel.setMethodCallHandler(this)
   }
 

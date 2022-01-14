@@ -4,7 +4,7 @@ import WalletConnectSwiftV2
 
 extension String: Error {}
 
-public class SwiftWalletconnectv2DartPlugin: NSObject, FlutterPlugin, WalletConnectClientDelegate {
+public class SwiftWalletconnectv2FlutterPlugin: NSObject, FlutterPlugin, WalletConnectClientDelegate {
     
     var client: WalletConnectClient?
     var channel: FlutterMethodChannel?
@@ -12,8 +12,8 @@ public class SwiftWalletconnectv2DartPlugin: NSObject, FlutterPlugin, WalletConn
     var proposals: [uint: SessionProposal] = [:]
     
     public static func register(with registrar: FlutterPluginRegistrar) {
-        let channel = FlutterMethodChannel(name: "walletconnectv2_dart", binaryMessenger: registrar.messenger())
-        let instance = SwiftWalletconnectv2DartPlugin()
+        let channel = FlutterMethodChannel(name: "walletconnectv2_flutter", binaryMessenger: registrar.messenger())
+        let instance = SwiftWalletconnectv2FlutterPlugin()
         instance.channel = channel
         registrar.addMethodCallDelegate(instance, channel: channel)
     }

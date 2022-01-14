@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'walletconnectv2_dart.dart';
+part of 'walletconnectv2_flutter.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

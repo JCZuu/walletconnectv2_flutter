@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:walletconnectv2_dart/walletconnectv2_dart.dart';
+import 'package:walletconnectv2_flutter/walletconnectv2_flutter.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,18 +22,18 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    Walletconnectv2Dart.onProposal = _onProposal;
-    Walletconnectv2Dart.onRequest = _onRequest;
-    log("walletconectv2 ${Walletconnectv2Dart.onProposal}");
+    Walletconnectv2Flutter.onProposal = _onProposal;
+    Walletconnectv2Flutter.onRequest = _onRequest;
+    log("walletconectv2 ${Walletconnectv2Flutter.onProposal}");
     initPlatformState();
   }
 
   Future<void> initPlatformState() async {
     String platformVersion;
     try {
-      final res = await Walletconnectv2Dart.platformVersion;
+      final res = await Walletconnectv2Flutter.platformVersion;
       platformVersion = res.data!;
-      final res2 = await Walletconnectv2Dart.init(
+      final res2 = await Walletconnectv2Flutter.init(
           AppMetadata(
               name: "Bitizen",
               description: "BitizenWallet",
@@ -45,7 +45,7 @@ class _MyAppState extends State<MyApp> {
           true,
           'relay.walletconnect.com');
       log("walletconectv2 $res2");
-      final res1 = await Walletconnectv2Dart.pair("wc:xxxxxxxxxxxxx");
+      final res1 = await Walletconnectv2Flutter.pair("wc:xxxxxxxxxxxxx");
       log("walletconectv2 $res1");
     } catch (e) {
       platformVersion = 'Failed to get platform version. $e';
@@ -86,16 +86,16 @@ class _MyAppState extends State<MyApp> {
       accounts.add("$c:0x0000000000000000000000000000000000000001");
     }
 
-    final res = await Walletconnectv2Dart.approveProposal(proposalId, accounts);
+    final res = await Walletconnectv2Flutter.approveProposal(proposalId, accounts);
     log("walletconectv2 onProposal res $res");
   }
 
   Future<void> _onRequest(AppMetadata metadata, SessionRequest request) async {
     if (request.request.method == "personal_sign") {
-      Walletconnectv2Dart.response(request.topic, request.request.id,
+      Walletconnectv2Flutter.response(request.topic, request.request.id,
           errCode: 1000, errMsg: "Failed demo");
     } else {
-      Walletconnectv2Dart.response(request.topic, request.request.id,
+      Walletconnectv2Flutter.response(request.topic, request.request.id,
           errCode: 0, data: "0x1000");
     }
   }
