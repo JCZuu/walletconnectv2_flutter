@@ -39,7 +39,7 @@ JSONRpcRequest _$JSONRpcRequestFromJson(Map<String, dynamic> json) =>
       json['id'] as int,
       json['jsonrpc'] as String,
       json['method'] as String,
-      json['params'],
+      json['params'] as List<dynamic>,
     );
 
 Map<String, dynamic> _$JSONRpcRequestToJson(JSONRpcRequest instance) =>

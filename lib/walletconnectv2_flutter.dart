@@ -40,7 +40,7 @@ class JSONRpcRequest {
   int id;
   String jsonrpc;
   String method;
-  dynamic params;
+  List<dynamic> params;
 
   JSONRpcRequest(this.id, this.jsonrpc, this.method, this.params);
 
