@@ -55,7 +55,7 @@ public class SwiftWalletconnectv2FlutterPlugin: NSObject, FlutterPlugin, WalletC
                 guard let arguments = call.arguments as? [String: Any] else {
                     throw "传递参数异常"
                 }
-                let err_code = arguments["err_code"] as! Int?
+                let err_code = arguments["err_code"] as? Int
                 if err_code == nil {
                     let response = JSONRPCResponse<AnyCodable>(id: arguments["id"] as! Int64, result: AnyCodable(arguments["data"] as! String))
                     self.client?.respond(topic: arguments["topic"] as! String, response: .response(response))
