@@ -55,12 +55,12 @@ public class SwiftWalletconnectv2FlutterPlugin: NSObject, FlutterPlugin, WalletC
                 guard let arguments = call.arguments as? [String: Any] else {
                     throw "传递参数异常"
                 }
-                let err_code = arguments["err_code"] as! Int
-                if err_code  == 0 {
+                let err_code = arguments["err_code"] as! Int?
+                if err_code == nil {
                     let response = JSONRPCResponse<AnyCodable>(id: arguments["id"] as! Int64, result: AnyCodable(arguments["data"] as! String))
                     self.client?.respond(topic: arguments["topic"] as! String, response: .response(response))
                 } else {
-                    self.client?.respond(topic: arguments["topic"] as! String, response: .error(JSONRPCErrorResponse.init(id: arguments["id"] as! Int64, error: JSONRPCErrorResponse.Error.init(code: err_code, message: arguments["err_msg"] as! String))))
+                    self.client?.respond(topic: arguments["topic"] as! String, response: .error(JSONRPCErrorResponse.init(id: arguments["id"] as! Int64, error: JSONRPCErrorResponse.Error.init(code: err_code!, message: arguments["err_msg"] as! String))))
                 }
             case "getPlatformVersion":
                 result("iOS " + UIDevice.current.systemVersion)
