@@ -8,8 +8,6 @@ public class SwiftWalletconnectv2FlutterPlugin: NSObject, FlutterPlugin, WalletC
     
     var client: WalletConnectClient?
     var channel: FlutterMethodChannel?
-    var proposalId: uint = 0
-    var proposals: [uint: SessionProposal] = [:]
     
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "walletconnectv2_flutter", binaryMessenger: registrar.messenger())
@@ -32,36 +30,6 @@ public class SwiftWalletconnectv2FlutterPlugin: NSObject, FlutterPlugin, WalletC
                     throw "传递参数异常"
                 }
                 try self.client!.pair(uri: uri)
-            case "approveProposal":
-                if self.client == nil {
-                    throw "尚未初始化"
-                }
-                guard let arguments = call.arguments as? [String: Any] else {
-                    throw "传递参数异常"
-                }
-                let proposalId = arguments["proposalId"] as! uint
-                if (self.proposals.index(forKey: proposalId) == nil) {
-                    throw "未找到该 Proposal"
-                }
-                print("walletconectv2 approveProposal", Set((arguments["accounts"] as! [String]).map({$0})))
-                try self.client?.approve(proposal: self.proposals[proposalId]!, accounts: Set((arguments["accounts"] as! [String]).map({$0})), completion: { res in
-                    print("walletconectv2 client.approve", res)
-                })
-                self.proposals.removeValue(forKey: proposalId)
-            case "response":
-                if self.client == nil {
-                    throw "尚未初始化"
-                }
-                guard let arguments = call.arguments as? [String: Any] else {
-                    throw "传递参数异常"
-                }
-                let err_code = arguments["err_code"] as? Int
-                if err_code == nil {
-                    let response = JSONRPCResponse<AnyCodable>(id: arguments["id"] as! Int64, result: AnyCodable(arguments["data"] as! String))
-                    self.client?.respond(topic: arguments["topic"] as! String, response: .response(response))
-                } else {
-                    self.client?.respond(topic: arguments["topic"] as! String, response: .error(JSONRPCErrorResponse.init(id: arguments["id"] as! Int64, error: JSONRPCErrorResponse.Error.init(code: err_code!, message: arguments["err_msg"] as! String))))
-                }
             case "getPlatformVersion":
                 result("iOS " + UIDevice.current.systemVersion)
             default:
@@ -80,16 +48,23 @@ public class SwiftWalletconnectv2FlutterPlugin: NSObject, FlutterPlugin, WalletC
     
     public func didReceive(sessionProposal: SessionProposal) {
         do {
-            let proposalId = self.proposalId + 1
-            self.proposals[proposalId] = sessionProposal
             self.channel?.invokeMethod("onProposal", arguments: [
-                "proposalId": proposalId,
                 "proposer": String(data: try JSONEncoder().encode(sessionProposal.proposer), encoding: .utf8),
                 "permissions": [
                     "blockchains": Array(sessionProposal.permissions.blockchains),
                     "methods": Array(sessionProposal.permissions.methods),
                 ]
-            ])
+            ], result: { res in
+                print("walletconectv2 didReceive sessionProposal: res", res)
+                if res is FlutterError {
+                    let err = (res as! FlutterError);
+                    self.client?.reject(proposal: sessionProposal, reason: SessionType.Reason.init(code: 50000, message: err.message!))
+                } else {
+                    self.client?.approve(proposal: sessionProposal, accounts: Set((res as! [String]).map({$0})), completion: { res in
+                        print("walletconectv2 client.approve", res)
+                    })
+                }
+            })
         } catch {
             print("didReceive error", error)
         }
@@ -104,7 +79,15 @@ public class SwiftWalletconnectv2FlutterPlugin: NSObject, FlutterPlugin, WalletC
             self.channel?.invokeMethod("onRequest", arguments: [
                 "proposer":String(data: try JSONEncoder().encode(sessions[sessionIndex].peer), encoding: .utf8),
                 "request": String(data: try JSONEncoder().encode(sessionRequest), encoding: .utf8),
-            ])
+            ], result: { res in
+                if res is FlutterError {
+                    let err = (res as! FlutterError);
+                    self.client?.respond(topic: sessionRequest.topic, response: .error(.init(id: sessionRequest.request.id, error: .init(code: 50000, message: err.message!))))
+                } else {
+                    let response = JSONRPCResponse<AnyCodable>(id: sessionRequest.request.id, result: AnyCodable(res as! String))
+                    self.client?.respond(topic: sessionRequest.topic, response: .response(response))
+                }
+            })
         } catch {
             print("didReceive error", error)
         }

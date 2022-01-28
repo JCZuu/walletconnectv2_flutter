@@ -41,12 +41,13 @@ class _MyAppState extends State<MyApp> {
               icons: [
                 "https://bitizen.org/wp-content/uploads/2021/07/cropped-cropped-lALPBGnDc6ar_GfNBADNBAA_1024_1024.png_720x720g-192x192.jpg"
               ]),
-          "xxxxxxxxxxxxx",
+          "xxxxxxxxxxxx",
           true,
           'relay.walletconnect.com');
-      log("walletconectv2 $res2");
-      final res1 = await Walletconnectv2Flutter.pair("wc:xxxxxxxxxxxxx");
-      log("walletconectv2 $res1");
+      log("walletconectv2 init successful $res2");
+      final res1 = await Walletconnectv2Flutter.pair(
+          "wc:xxxxxxxxxxxx@2?controller=false&publicKey=xxxxxxxxxxxx&relay=%7B%22protocol%22%3A%22waku%22%7D");
+      log("walletconectv2 pair successful $res1");
     } catch (e) {
       platformVersion = 'Failed to get platform version. $e';
     }
@@ -75,9 +76,9 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  Future<void> _onProposal(int proposalId, AppMetadata metadata,
-      SessionPermissions permissions) async {
-    log("walletconectv2 onProposal $proposalId ${metadata.toJson()} ${permissions.toJson()}");
+  Future<List<String>> _onProposal(
+      AppMetadata metadata, SessionPermissions permissions) async {
+    log("walletconectv2 onProposal ${metadata.toJson()} ${permissions.toJson()}");
 
     final List<String> accounts = [];
 
@@ -86,17 +87,17 @@ class _MyAppState extends State<MyApp> {
       accounts.add("$c:0x0000000000000000000000000000000000000001");
     }
 
-    final res = await Walletconnectv2Flutter.approveProposal(proposalId, accounts);
-    log("walletconectv2 onProposal res $res");
+    // throw "test error";
+
+    return accounts;
   }
 
-  Future<void> _onRequest(AppMetadata metadata, SessionRequest request) async {
+  Future<String> _onRequest(
+      AppMetadata metadata, SessionRequest request) async {
     if (request.request.method == "personal_sign") {
-      Walletconnectv2Flutter.response(request.topic, request.request.id,
-          errCode: 1000, errMsg: "Failed demo");
+      throw "Failed demo";
     } else {
-      Walletconnectv2Flutter.response(request.topic, request.request.id,
-          errCode: 0, data: "0x1000");
+      return "0x0";
     }
   }
 }

@@ -2,10 +2,20 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'walletconnectv2_flutter.g.dart';
+
+@JsonSerializable()
+class SessionResponse {
+  String topic;
+  int id;
+  dynamic data;
+
+  SessionResponse(this.topic, this.id, this.data);
+}
 
 @JsonSerializable()
 class AppMetadata {
@@ -81,11 +91,10 @@ class Walletconnectv2Flutter {
   static const MethodChannel _channel =
       MethodChannel('walletconnectv2_flutter');
 
-  static Future<void> Function(
-          int proposalId, AppMetadata metadata, SessionPermissions permissions)?
-      onProposal;
-  static Future<void> Function(AppMetadata metadata, SessionRequest request)?
-      onRequest;
+  static Future<List<String>> Function(
+      AppMetadata metadata, SessionPermissions permissions)? onProposal;
+  static Future<String> Function(
+      AppMetadata metadata, SessionRequest request)? onRequest;
 
   static Future<Result<String?>> get platformVersion async {
     final String? version = await _channel.invokeMethod('getPlatformVersion');
@@ -93,7 +102,7 @@ class Walletconnectv2Flutter {
   }
 
   static Future<Result<T>> _parseError<T>(Future<T> fut) async {
-    log("walletconectv2  call native $fut");
+    log("walletconectv2 call native $fut");
     try {
       final args = await fut;
       return Result(true, null, args);
@@ -121,55 +130,25 @@ class Walletconnectv2Flutter {
     return _parseError<void>(_channel.invokeMethod('pair', uri));
   }
 
-  static Future<Result<void>> approveProposal(
-      int proposalId, List<String> accounts) async {
-    log("walletconectv2 proposalId $proposalId accounts $accounts");
-    return _parseError<void>(_channel.invokeMethod('approveProposal', {
-      "proposalId": proposalId,
-      "accounts": accounts,
-    }));
-  }
-
-  static Future<Result<void>> response(String topic, int id,
-      {String? data, int? errCode, String? errMsg}) async {
-    log("walletconectv2 topic $topic requestId $id data $data errCode $errCode errMsg $errMsg");
-    return _parseError<void>(_channel.invokeMethod('response', {
-      "topic": topic,
-      "id": id,
-      "data": data,
-      "err_code": errCode,
-      "err_msg": errMsg,
-    }));
-  }
-
   static Future<dynamic> _methodCallHandler(MethodCall call) async {
     log("walletconectv2 ${call.method} ${call.arguments.runtimeType} ${call.arguments} $onProposal");
-    try {
-      switch (call.method) {
-        case "onProposal":
-          final proposalId = call.arguments["proposalId"] as int;
-          final AppMetadata proposer = AppMetadata.fromJson(
-              jsonDecode(call.arguments["proposer"] as String));
-          final SessionPermissions permissions = SessionPermissions.fromJson({
-            "blockchains": call.arguments["permissions"]["blockchains"],
-            "methods": call.arguments["permissions"]["methods"],
-          });
-          if (onProposal != null) {
-            onProposal!(proposalId, proposer, permissions);
-          }
-          return;
-        case "onRequest":
-          final AppMetadata proposer = AppMetadata.fromJson(
-              jsonDecode(call.arguments["proposer"] as String));
-          final SessionRequest request = SessionRequest.fromJson(
-              jsonDecode(call.arguments["request"] as String));
-          if (onRequest != null) {
-            onRequest!(proposer, request);
-          }
-          return;
-      }
-    } catch (e) {
-      log("walletconectv2 error: $e");
+    switch (call.method) {
+      case "onProposal":
+        final AppMetadata proposer = AppMetadata.fromJson(
+            jsonDecode(call.arguments["proposer"] as String));
+        final SessionPermissions permissions = SessionPermissions.fromJson({
+          "blockchains": call.arguments["permissions"]["blockchains"],
+          "methods": call.arguments["permissions"]["methods"],
+        });
+        return onProposal!(proposer, permissions);
+      case "onRequest":
+        final AppMetadata proposer = AppMetadata.fromJson(
+            jsonDecode(call.arguments["proposer"] as String));
+        final SessionRequest request = SessionRequest.fromJson(
+            jsonDecode(call.arguments["request"] as String));
+        return onRequest!(proposer, request);
+      default:
+        throw FlutterError("method not implement");
     }
   }
 }
