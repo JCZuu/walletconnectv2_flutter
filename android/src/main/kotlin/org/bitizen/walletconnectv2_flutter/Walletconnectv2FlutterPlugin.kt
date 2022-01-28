@@ -161,7 +161,6 @@ class Walletconnectv2FlutterPlugin : FlutterPlugin, MethodCallHandler {
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "walletconnectv2_flutter")
         channel.setMethodCallHandler(this)
         application = flutterPluginBinding.applicationContext as Application
-        WalletConnectClient.setWalletDelegate(wcHandler)
     }
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
@@ -217,7 +216,9 @@ class Walletconnectv2FlutterPlugin : FlutterPlugin, MethodCallHandler {
             metadata = metadata,
         )
         WalletConnectClient.initialize(init)
-        result.success(null)
+        WalletConnectClient.setWalletDelegate(wcHandler)
+        Log.e(TAG, "onInit: done $init")
+        result.success(true)
     }
 
     override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
