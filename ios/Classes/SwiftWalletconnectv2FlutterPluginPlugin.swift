@@ -1,6 +1,6 @@
 import Flutter
 import UIKit
-import WalletConnect
+import WalletConnectSwiftV2
 
 extension String: Error {}
 
