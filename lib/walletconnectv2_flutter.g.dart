@@ -6,6 +6,20 @@ part of 'walletconnectv2_flutter.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+SessionResponse _$SessionResponseFromJson(Map<String, dynamic> json) =>
+    SessionResponse(
+      json['topic'] as String,
+      json['id'] as int,
+      json['data'],
+    );
+
+Map<String, dynamic> _$SessionResponseToJson(SessionResponse instance) =>
+    <String, dynamic>{
+      'topic': instance.topic,
+      'id': instance.id,
+      'data': instance.data,
+    };
+
 AppMetadata _$AppMetadataFromJson(Map<String, dynamic> json) => AppMetadata(
       name: json['name'] as String?,
       description: json['description'] as String?,

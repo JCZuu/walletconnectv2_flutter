@@ -31,7 +31,11 @@ target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
-  pod 'WalletConnectSwiftV2', :git => 'https://github.com/BitizenWallet/WalletConnectSwiftV2.git', :branch=>'main'
+  # pod 'WalletConnectSwiftV2', :git => 'https://github.com/BitizenWallet/WalletConnectSwiftV2.git', :branch=>'main'
+  pod 'WalletConnect', :path => '~/Downloads/WalletConnectSwiftV2'
+  pod 'Relayer', :path => '~/Downloads/WalletConnectSwiftV2'
+  pod 'WalletConnectKMS', :path => '~/Downloads/WalletConnectSwiftV2'
+  pod 'WalletConnectUtils', :path => '~/Downloads/WalletConnectSwiftV2'
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end

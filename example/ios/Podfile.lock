@@ -1,40 +1,50 @@
 PODS:
-  - CryptoSwift (1.4.3)
   - Flutter (1.0.0)
+  - Relayer (0.0.1):
+    - WalletConnectUtils
   - WalletConnect (0.0.1):
-    - CryptoSwift (>= 1.4.1)
+    - Relayer
+    - WalletConnectKMS
+  - WalletConnectKMS (0.0.1):
+    - WalletConnectUtils
+  - WalletConnectUtils (0.0.1)
   - walletconnectv2_flutter (0.0.1):
     - Flutter
+    - Relayer
+    - WalletConnect
+    - WalletConnectKMS
+    - WalletConnectUtils
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
-  - WalletConnect (from `https://github.com/BitizenWallet/WalletConnectSwiftV2.git`, branch `main`)
+  - Relayer (from `~/Downloads/WalletConnectSwiftV2`)
+  - WalletConnect (from `~/Downloads/WalletConnectSwiftV2`)
+  - WalletConnectKMS (from `~/Downloads/WalletConnectSwiftV2`)
+  - WalletConnectUtils (from `~/Downloads/WalletConnectSwiftV2`)
   - walletconnectv2_flutter (from `.symlinks/plugins/walletconnectv2_flutter/ios`)
-
-SPEC REPOS:
-  trunk:
-    - CryptoSwift
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
+  Relayer:
+    :path: "~/Downloads/WalletConnectSwiftV2"
   WalletConnect:
-    :branch: main
-    :git: https://github.com/BitizenWallet/WalletConnectSwiftV2.git
+    :path: "~/Downloads/WalletConnectSwiftV2"
+  WalletConnectKMS:
+    :path: "~/Downloads/WalletConnectSwiftV2"
+  WalletConnectUtils:
+    :path: "~/Downloads/WalletConnectSwiftV2"
   walletconnectv2_flutter:
     :path: ".symlinks/plugins/walletconnectv2_flutter/ios"
 
-CHECKOUT OPTIONS:
-  WalletConnect:
-    :commit: 499b3b1034dec8a151ce958d11435cf179f344f1
-    :git: https://github.com/BitizenWallet/WalletConnectSwiftV2.git
-
 SPEC CHECKSUMS:
-  CryptoSwift: a0799ee936271bd2253a006f1e4523df21845000
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
-  WalletConnect: 5bf9861394510d94efd1f1cad7e7169bf34cc85f
-  walletconnectv2_flutter: 5e3ed4c994da74c72dd55d492781d6c5c0bfb59c
+  Relayer: ae60fa7481956ae76d15df3445b6edc97822c072
+  WalletConnect: fda4f043b74dc187fb5a86d2524345e6d7260894
+  WalletConnectKMS: fde88f04f9a7fd65db762d1f1f2945b05a2e30b5
+  WalletConnectUtils: 36c4105248abd9083044c1e3ba4c11af55fbe108
+  walletconnectv2_flutter: 85d80a1f57eca0594d9732d7b886a8df4dbb935d
 
-PODFILE CHECKSUM: fa0cf62ba3f95f453e5391294af4181ea4718228
+PODFILE CHECKSUM: cb60715a995daa1a1e236d1b895cc8177ecb084f
 
 COCOAPODS: 1.11.3

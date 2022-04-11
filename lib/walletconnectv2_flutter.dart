@@ -15,6 +15,11 @@ class SessionResponse {
   dynamic data;
 
   SessionResponse(this.topic, this.id, this.data);
+
+  factory SessionResponse.fromJson(Map<String, dynamic> json) =>
+      _$SessionResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SessionResponseToJson(this);
 }
 
 @JsonSerializable()
@@ -93,8 +98,8 @@ class Walletconnectv2Flutter {
 
   static Future<List<String>> Function(
       AppMetadata metadata, SessionPermissions permissions)? onProposal;
-  static Future<String> Function(
-      AppMetadata metadata, SessionRequest request)? onRequest;
+  static Future<String> Function(AppMetadata metadata, SessionRequest request)?
+      onRequest;
 
   static Future<Result<String?>> get platformVersion async {
     final String? version = await _channel.invokeMethod('getPlatformVersion');

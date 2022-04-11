@@ -1,11 +1,11 @@
 import Flutter
 import UIKit
-import WalletConnectSwiftV2
+import WalletConnect
+import WalletConnectUtils
 
 extension String: Error {}
 
 public class SwiftWalletconnectv2FlutterPlugin: NSObject, FlutterPlugin, WalletConnectClientDelegate {
-    
     var client: WalletConnectClient?
     var channel: FlutterMethodChannel?
     
@@ -42,11 +42,11 @@ public class SwiftWalletconnectv2FlutterPlugin: NSObject, FlutterPlugin, WalletC
         print("walletconectv2 handle done", call.method, call.arguments)
     }
     
-    public func didUpdate(sessionTopic: String, accounts: Set<String>) {
+    public func didUpdate(sessionTopic: String, accounts: Set<Account>) {
         print("walletconectv2 didUpdate", sessionTopic, accounts)
     }
     
-    public func didReceive(sessionProposal: SessionProposal) {
+    public func didReceive(sessionProposal: Session.Proposal) {
         do {
             self.channel?.invokeMethod("onProposal", arguments: [
                 "proposer": String(data: try JSONEncoder().encode(sessionProposal.proposer), encoding: .utf8),
@@ -58,11 +58,9 @@ public class SwiftWalletconnectv2FlutterPlugin: NSObject, FlutterPlugin, WalletC
                 print("walletconectv2 didReceive sessionProposal: res", res)
                 if res is FlutterError {
                     let err = (res as! FlutterError);
-                    self.client?.reject(proposal: sessionProposal, reason: SessionType.Reason.init(code: 50000, message: err.message!))
+                    self.client?.reject(proposal: sessionProposal, reason: RejectionReason.disapprovedChains)
                 } else {
-                    self.client?.approve(proposal: sessionProposal, accounts: Set((res as! [String]).map({$0})), completion: { res in
-                        print("walletconectv2 client.approve", res)
-                    })
+                    self.client?.approve(proposal: sessionProposal, accounts: Set((res as! [String]).map({Account($0)!})))
                 }
             })
         } catch {
@@ -70,7 +68,7 @@ public class SwiftWalletconnectv2FlutterPlugin: NSObject, FlutterPlugin, WalletC
         }
     }
     
-    public func didReceive(sessionRequest: SessionRequest) {
+    public func didReceive(sessionRequest: Request) {
         do {
             let sessions = self.client!.getSettledSessions()
             let sessionIndex = sessions.firstIndex(where: { s in
@@ -82,10 +80,10 @@ public class SwiftWalletconnectv2FlutterPlugin: NSObject, FlutterPlugin, WalletC
             ], result: { res in
                 if res is FlutterError {
                     let err = (res as! FlutterError);
-                    self.client?.respond(topic: sessionRequest.topic, response: .error(.init(id: sessionRequest.request.id, error: .init(code: 50000, message: err.message!))))
+                    self.client?.respond(topic: sessionRequest.topic, response: JsonRpcResult.error(JSONRPCErrorResponse.init(id: sessionRequest.id, error: JSONRPCErrorResponse.Error.init(code: 5000, message: err.message!))))
                 } else {
-                    let response = JSONRPCResponse<AnyCodable>(id: sessionRequest.request.id, result: AnyCodable(res as! String))
-                    self.client?.respond(topic: sessionRequest.topic, response: .response(response))
+                    let response = JSONRPCResponse<AnyCodable>(id: sessionRequest.id, result: AnyCodable(res as! String))
+                    self.client?.respond(topic: sessionRequest.topic, response: JsonRpcResult.response(response))
                 }
             })
         } catch {
@@ -93,12 +91,16 @@ public class SwiftWalletconnectv2FlutterPlugin: NSObject, FlutterPlugin, WalletC
         }
     }
     
-    public func didDelete(sessionTopic: String, reason: SessionType.Reason) {
+    public func didDelete(sessionTopic: String, reason: Reason) {
         print("walletconectv2 didDelete", sessionTopic, reason)
     }
     
-    public func didUpgrade(sessionTopic: String, permissions: SessionType.Permissions) {
+    public func didUpgrade(sessionTopic: String, permissions: Session.Permissions) {
         print("walletconectv2 didUpgrade", sessionTopic, permissions)
+    }
+    
+    public func didSettle(session: Session) {
+        print("walletconectv2 didSettle", session)
     }
     
     private func onInit(_ call: FlutterMethodCall, result: @escaping FlutterResult) throws {
@@ -110,7 +112,7 @@ public class SwiftWalletconnectv2FlutterPlugin: NSObject, FlutterPlugin, WalletC
         }
         
         let metadata = try JSONDecoder().decode(AppMetadata.self, from: (arguments["metadata"] as! String).data(using: .utf8)!)
-        self.client = WalletConnectClient(metadata: metadata, projectId: arguments["projectId"] as! String, isController: arguments["isController"] as! Bool, relayHost: arguments["relayHost"] as! String)
+        self.client = WalletConnectClient(metadata: metadata, projectId: arguments["projectId"] as! String, relayHost: arguments["relayHost"] as! String)
         self.client!.delegate = self
         print("walletconectv2 oninit", metadata, arguments["isController"], arguments["relayHost"])
         result(nil)
