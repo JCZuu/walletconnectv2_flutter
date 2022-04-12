@@ -54,14 +54,14 @@ class SessionPermissions {
 @JsonSerializable()
 class JSONRpcRequest {
   int id;
-  String jsonrpc;
   String method;
   List<dynamic> params;
+  String? jsonrpc;
   String? topic;
   String? chainId;
 
-  JSONRpcRequest(this.id, this.jsonrpc, this.method, this.params,
-      {this.topic, this.chainId});
+  JSONRpcRequest(this.id, this.method, this.params,
+      {this.jsonrpc, this.topic, this.chainId});
 
   factory JSONRpcRequest.fromJson(Map<String, dynamic> json) =>
       _$JSONRpcRequestFromJson(json);
@@ -83,9 +83,8 @@ class AndroidSessionRequest {
   Map<String, dynamic> toJson() => _$AndroidSessionRequestToJson(this);
 
   JSONRpcRequest toJSONRpcRequest() {
-    return JSONRpcRequest(
-        request.id, request.jsonrpc, request.method, request.params,
-        topic: topic, chainId: chainId);
+    return JSONRpcRequest(request.id, request.method, request.params,
+        jsonrpc: request.jsonrpc, topic: topic, chainId: chainId);
   }
 }
 

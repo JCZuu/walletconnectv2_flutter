@@ -191,15 +191,16 @@ class Walletconnectv2FlutterPlugin : FlutterPlugin, MethodCallHandler {
         val pairListener = object : WalletConnect.Listeners.Pairing {
             override fun onSuccess(settledPairing: WalletConnect.Model.SettledPairing) {
                 Log.e(TAG, "onPair onSuccess: $settledPairing")
+                result.success(null)
             }
 
             override fun onError(error: Throwable) {
                 Log.e(TAG, "onPair onError: $error")
+                result.error("-1", error.message, null)
             }
         }
 
         WalletConnectClient.pair(WalletConnect.Params.Pair(uri), pairListener)
-        result.success(null)
     }
 
     private fun onInit(call: MethodCall, result: Result) {

@@ -51,9 +51,9 @@ Map<String, dynamic> _$SessionPermissionsToJson(SessionPermissions instance) =>
 JSONRpcRequest _$JSONRpcRequestFromJson(Map<String, dynamic> json) =>
     JSONRpcRequest(
       json['id'] as int,
-      json['jsonrpc'] as String,
       json['method'] as String,
       json['params'] as List<dynamic>,
+      jsonrpc: json['jsonrpc'] as String?,
       topic: json['topic'] as String?,
       chainId: json['chainId'] as String?,
     );
@@ -61,9 +61,9 @@ JSONRpcRequest _$JSONRpcRequestFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$JSONRpcRequestToJson(JSONRpcRequest instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'jsonrpc': instance.jsonrpc,
       'method': instance.method,
       'params': instance.params,
+      'jsonrpc': instance.jsonrpc,
       'topic': instance.topic,
       'chainId': instance.chainId,
     };
