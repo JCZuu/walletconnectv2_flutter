@@ -54,6 +54,8 @@ JSONRpcRequest _$JSONRpcRequestFromJson(Map<String, dynamic> json) =>
       json['jsonrpc'] as String,
       json['method'] as String,
       json['params'] as List<dynamic>,
+      topic: json['topic'] as String?,
+      chainId: json['chainId'] as String?,
     );
 
 Map<String, dynamic> _$JSONRpcRequestToJson(JSONRpcRequest instance) =>
@@ -62,16 +64,20 @@ Map<String, dynamic> _$JSONRpcRequestToJson(JSONRpcRequest instance) =>
       'jsonrpc': instance.jsonrpc,
       'method': instance.method,
       'params': instance.params,
+      'topic': instance.topic,
+      'chainId': instance.chainId,
     };
 
-SessionRequest _$SessionRequestFromJson(Map<String, dynamic> json) =>
-    SessionRequest(
+AndroidSessionRequest _$AndroidSessionRequestFromJson(
+        Map<String, dynamic> json) =>
+    AndroidSessionRequest(
       json['topic'] as String,
       JSONRpcRequest.fromJson(json['request'] as Map<String, dynamic>),
       chainId: json['chainId'] as String?,
     );
 
-Map<String, dynamic> _$SessionRequestToJson(SessionRequest instance) =>
+Map<String, dynamic> _$AndroidSessionRequestToJson(
+        AndroidSessionRequest instance) =>
     <String, dynamic>{
       'topic': instance.topic,
       'request': instance.request,

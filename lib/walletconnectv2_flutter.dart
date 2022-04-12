@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -56,8 +57,11 @@ class JSONRpcRequest {
   String jsonrpc;
   String method;
   List<dynamic> params;
+  String? topic;
+  String? chainId;
 
-  JSONRpcRequest(this.id, this.jsonrpc, this.method, this.params);
+  JSONRpcRequest(this.id, this.jsonrpc, this.method, this.params,
+      {this.topic, this.chainId});
 
   factory JSONRpcRequest.fromJson(Map<String, dynamic> json) =>
       _$JSONRpcRequestFromJson(json);
@@ -66,17 +70,23 @@ class JSONRpcRequest {
 }
 
 @JsonSerializable()
-class SessionRequest {
+class AndroidSessionRequest {
   String topic;
   JSONRpcRequest request;
   String? chainId;
 
-  SessionRequest(this.topic, this.request, {this.chainId});
+  AndroidSessionRequest(this.topic, this.request, {this.chainId});
 
-  factory SessionRequest.fromJson(Map<String, dynamic> json) =>
-      _$SessionRequestFromJson(json);
+  factory AndroidSessionRequest.fromJson(Map<String, dynamic> json) =>
+      _$AndroidSessionRequestFromJson(json);
 
-  Map<String, dynamic> toJson() => _$SessionRequestToJson(this);
+  Map<String, dynamic> toJson() => _$AndroidSessionRequestToJson(this);
+
+  JSONRpcRequest toJSONRpcRequest() {
+    return JSONRpcRequest(
+        request.id, request.jsonrpc, request.method, request.params,
+        topic: topic, chainId: chainId);
+  }
 }
 
 class Result<T> {
@@ -98,7 +108,7 @@ class Walletconnectv2Flutter {
 
   static Future<List<String>> Function(
       AppMetadata metadata, SessionPermissions permissions)? onProposal;
-  static Future<String> Function(AppMetadata metadata, SessionRequest request)?
+  static Future<String> Function(AppMetadata metadata, JSONRpcRequest request)?
       onRequest;
 
   static Future<Result<String?>> get platformVersion async {
@@ -149,8 +159,15 @@ class Walletconnectv2Flutter {
       case "onRequest":
         final AppMetadata proposer = AppMetadata.fromJson(
             jsonDecode(call.arguments["proposer"] as String));
-        final SessionRequest request = SessionRequest.fromJson(
-            jsonDecode(call.arguments["request"] as String));
+        JSONRpcRequest request;
+        if (Platform.isAndroid) {
+          final androidRequest = AndroidSessionRequest.fromJson(
+              jsonDecode(call.arguments["request"] as String));
+          request = androidRequest.toJSONRpcRequest();
+        } else {
+          request = JSONRpcRequest.fromJson(
+              jsonDecode(call.arguments["request"] as String));
+        }
         return onRequest!(proposer, request);
       default:
         throw FlutterError("method not implement");

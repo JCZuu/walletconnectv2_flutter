@@ -93,8 +93,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<String> _onRequest(
-      AppMetadata metadata, SessionRequest request) async {
-    if (request.request.method == "personal_sign") {
+      AppMetadata metadata, JSONRpcRequest request) async {
+    if (request.method == "personal_sign") {
       throw "Failed demo";
     } else {
       return "0x0";

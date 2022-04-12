@@ -17,25 +17,43 @@ PODS:
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
-  - Relayer (from `~/Downloads/WalletConnectSwiftV2`)
-  - WalletConnect (from `~/Downloads/WalletConnectSwiftV2`)
-  - WalletConnectKMS (from `~/Downloads/WalletConnectSwiftV2`)
-  - WalletConnectUtils (from `~/Downloads/WalletConnectSwiftV2`)
+  - Relayer (from `https://github.com/BitizenWallet/WalletConnectSwiftV2.git`, branch `main`)
+  - WalletConnect (from `https://github.com/BitizenWallet/WalletConnectSwiftV2.git`, branch `main`)
+  - WalletConnectKMS (from `https://github.com/BitizenWallet/WalletConnectSwiftV2.git`, branch `main`)
+  - WalletConnectUtils (from `https://github.com/BitizenWallet/WalletConnectSwiftV2.git`, branch `main`)
   - walletconnectv2_flutter (from `.symlinks/plugins/walletconnectv2_flutter/ios`)
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
   Relayer:
-    :path: "~/Downloads/WalletConnectSwiftV2"
+    :branch: main
+    :git: https://github.com/BitizenWallet/WalletConnectSwiftV2.git
   WalletConnect:
-    :path: "~/Downloads/WalletConnectSwiftV2"
+    :branch: main
+    :git: https://github.com/BitizenWallet/WalletConnectSwiftV2.git
   WalletConnectKMS:
-    :path: "~/Downloads/WalletConnectSwiftV2"
+    :branch: main
+    :git: https://github.com/BitizenWallet/WalletConnectSwiftV2.git
   WalletConnectUtils:
-    :path: "~/Downloads/WalletConnectSwiftV2"
+    :branch: main
+    :git: https://github.com/BitizenWallet/WalletConnectSwiftV2.git
   walletconnectv2_flutter:
     :path: ".symlinks/plugins/walletconnectv2_flutter/ios"
+
+CHECKOUT OPTIONS:
+  Relayer:
+    :commit: 262ad259826bbd03e9a16b6039c5fd4d6dc5470e
+    :git: https://github.com/BitizenWallet/WalletConnectSwiftV2.git
+  WalletConnect:
+    :commit: 262ad259826bbd03e9a16b6039c5fd4d6dc5470e
+    :git: https://github.com/BitizenWallet/WalletConnectSwiftV2.git
+  WalletConnectKMS:
+    :commit: 262ad259826bbd03e9a16b6039c5fd4d6dc5470e
+    :git: https://github.com/BitizenWallet/WalletConnectSwiftV2.git
+  WalletConnectUtils:
+    :commit: 262ad259826bbd03e9a16b6039c5fd4d6dc5470e
+    :git: https://github.com/BitizenWallet/WalletConnectSwiftV2.git
 
 SPEC CHECKSUMS:
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
@@ -45,6 +63,6 @@ SPEC CHECKSUMS:
   WalletConnectUtils: 36c4105248abd9083044c1e3ba4c11af55fbe108
   walletconnectv2_flutter: 85d80a1f57eca0594d9732d7b886a8df4dbb935d
 
-PODFILE CHECKSUM: cb60715a995daa1a1e236d1b895cc8177ecb084f
+PODFILE CHECKSUM: 9083780e425b6a453a1daa18e300f8db6f95eb9d
 
 COCOAPODS: 1.11.3
